@@ -1320,13 +1320,13 @@ class QgridWidget(widgets.DOMWidget):
         else:
             return df[col_name]
 
-    def _set_col_series_on_df(self, col_name, df, col_series):
+    def _set_col_series_on_df(self, col_name, df: pd.DataFrame, col_series):
         if col_name in self._primary_key:
             if len(self._primary_key) > 1:
                 key_index = self._primary_key.index(col_name)
                 prev_name = df.index.levels[key_index].name
-                df.index.set_levels(col_series, level=key_index, inplace=True)
-                df.index.rename(prev_name, level=key_index, inplace=True)
+                df.index = df.index.set_levels(col_series, level=key_index)
+                df.index = df.index.rename(prev_name, level=key_index)
             else:
                 prev_name = df.index.name
                 df.set_index(col_series, inplace=True)
